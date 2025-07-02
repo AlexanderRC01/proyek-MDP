@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardElevation="4dp"
+    app:cardCornerRadius="10dp"
+    android:padding="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Judul laporan -->
+        <TextView
+            android:id="@+id/reportTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Judul Laporan"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#333333" />
+
+        <ImageView
+            android:id="@+id/reportImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:layout_marginTop="8dp"
+            android:contentDescription="Gambar laporan" />
+
+        <!-- Deskripsi laporan -->
+        <TextView
+            android:id="@+id/reportDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Deskripsi singkat laporan yang perlu diverifikasi..."
+            android:textSize="14sp"
+            android:textColor="#666666"
+            android:layout_marginTop="8dp"
+            android:maxLines="3"
+            android:ellipsize="end" />
+
+        <!-- Status Label (misal spam/duplikat) -->
+        <TextView
+            android:id="@+id/reportStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status: Spam"
+            android:textSize="12sp"
+            android:textColor="#E74C3C"
+            android:layout_marginTop="6dp"
+            android:visibility="gone" />
+
+        <!-- Tombol aksi: Verifikasi, Tolak, Koreksi -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="12dp"
+            android:gravity="end">
+
+            <Button
+                android:id="@+id/btnVerify"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Verifikasi"
+                android:textAllCaps="false"
+                android:backgroundTint="#1ABC4C"
+                android:textColor="#FFFFFF"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnReject"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Tolak"
+                android:textAllCaps="false"
+                android:backgroundTint="#E74C3C"
+                android:textColor="#FFFFFF"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:text="Koreksi"
+                android:textAllCaps="false"
+                android:backgroundTint="#F39C12"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <!-- Tombol tandai selesai -->
+        <Button
+            android:id="@+id/btnMarkComplete"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:text="Tandai Selesai"
+            android:textAllCaps="false"
+            android:backgroundTint="#27AE60"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="16dp" />
+
+        <!-- Upload bukti penyelesaian -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Upload Bukti Penyelesaian:"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <ImageView
+            android:id="@+id/imageProof"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Bukti penyelesaian"
+            android:background="#EEEEEE" />
+
+        <Button
+            android:id="@+id/btnUploadProof"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:text="Pilih Gambar Bukti"
+            android:textAllCaps="false"
+            android:backgroundTint="#2980B9"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp" />
+
+        <!-- Catatan akhir moderator -->
+        <EditText
+            android:id="@+id/editTextModeratorNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Tulis catatan penyelesaian (opsional)..."
+            android:layout_marginTop="12dp"
+            android:minLines="2"
+            android:maxLines="4"
+            android:background="@android:drawable/edit_text"
+            android:padding="8dp"
+            android:textColor="#333333"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
