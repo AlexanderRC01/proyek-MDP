@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 //        if (auth.currentUser != null) {
 //            startActivity(Intent(this, MainActivity::class.java))
 //            finish()
-//        }
+//        }afsdfdsffsd
 
         setContentView(binding.root)
 
