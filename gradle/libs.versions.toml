@@ -23,6 +23,8 @@ roomRuntime = "2.6.1"
 
 retrofit = "2.9.0"
 moshi = "1.15.0"
+foundationAndroid = "1.8.3"
+firebaseStorageKtx = "21.0.2"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
@@ -49,6 +51,8 @@ retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = 
 converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 moshi-kotlin = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 moshi-kotlin-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
+androidx-foundation-android = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
+firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version = "8.6.0" }

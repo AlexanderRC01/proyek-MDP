@@ -1,10 +1,8 @@
 plugins {
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.android.application)
-
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android") // ✅ wajib pakai yang ini
     id("androidx.navigation.safeargs.kotlin")
     id("kotlin-kapt")
-
     id("com.google.gms.google-services")
 }
 
@@ -70,6 +68,8 @@ dependencies {
 
     // Room
     implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.foundation.android)
+    implementation(libs.firebase.storage.ktx)
     kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
@@ -87,6 +87,15 @@ dependencies {
     implementation ("androidx.cardview:cardview:1.0.0")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib")
+
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    kapt("com.github.bumptech.glide:compiler:4.16.0")
+
+    implementation("com.google.firebase:firebase-storage-ktx")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+
+
 
 }
 

@@ -10,6 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 import com.myapplication.databinding.ActivityLoginBinding
 import com.myapplication.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 
 class LoginActivity : AppCompatActivity() {
@@ -50,10 +51,29 @@ class LoginActivity : AppCompatActivity() {
                         // Login berhasil
                         val user = auth.currentUser
                         // Pindah ke halaman utama atau dashboard
-                        val intent = Intent(this, WargaHomeActivity::class.java)
-                        intent.putExtra("USER_ID", user?.uid)
-                        intent.putExtra("USER_EMAIL", user?.email)
-                        startActivity(intent)
+                        val uid = auth.currentUser?.uid
+                        if (uid != null) {
+                            val db = FirebaseFirestore.getInstance()
+                            db.collection("users").document(uid).get()
+                                .addOnSuccessListener { document ->
+                                    val role = document.getString("role") ?: "warga"
+
+                                    val intent = when (role) {
+                                        "admin" -> Intent(this, AdminHome::class.java)
+                                        "moderator" -> Intent(this, ModeratorHomeActivity::class.java)
+                                        else -> Intent(this, WargaHomeActivity::class.java)
+                                    }
+
+                                    intent.putExtra("USER_ID", uid)
+                                    intent.putExtra("USER_EMAIL", user?.email)
+                                    startActivity(intent)
+                                    finish()
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(this, "Gagal membaca data pengguna", Toast.LENGTH_SHORT).show()
+                                }
+                        }
+
                         finish() // supaya tidak kembali ke login
                     } else {
                         // Login gagal
