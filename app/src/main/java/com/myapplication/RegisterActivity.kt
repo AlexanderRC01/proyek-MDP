@@ -53,7 +53,8 @@ class RegisterActivity : AppCompatActivity() {
                             "name" to name,
                             "fullName" to fullName,
                             "emailAddress" to emailAddress,
-                            "registeredEmail" to email
+                            "registeredEmail" to email,
+                            "role" to "user"
                         )
 
                         if (userId != null) {

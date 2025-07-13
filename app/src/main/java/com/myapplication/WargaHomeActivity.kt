@@ -59,6 +59,8 @@ class WargaHomeActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
 
+                Toast.makeText(this, "Berhasil memuat laporan", Toast.LENGTH_SHORT).show()
+
                 recyclerView.adapter = reportAdapter
             }
             .addOnFailureListener {

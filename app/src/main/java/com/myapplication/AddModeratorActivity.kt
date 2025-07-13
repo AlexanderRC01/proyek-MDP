@@ -11,7 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.auth.User
+//import com.google.firebase.firestore.auth.User
 
 class AddModeratorActivity : AppCompatActivity() {
     private lateinit var addModeratorButton: Button
