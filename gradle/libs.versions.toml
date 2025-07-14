@@ -55,6 +55,6 @@ androidx-foundation-android = { group = "androidx.compose.foundation", name = "f
 firebase-storage-ktx = { group = "com.google.firebase", name = "firebase-storage-ktx", version.ref = "firebaseStorageKtx" }
 
 [plugins]
-android-application = { id = "com.android.application", version = "8.6.0" }
+android-application = { id = "com.android.application", version = "8.8.2" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version = "1.9.24" }
 google-services = { id = "com.google.gms.google-services", version = "4.4.2" }

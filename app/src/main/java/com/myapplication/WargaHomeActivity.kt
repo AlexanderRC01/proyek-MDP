@@ -44,9 +44,19 @@ class WargaHomeActivity : AppCompatActivity() {
 
 
     private fun loadReports() {
+        val db = FirebaseFirestore.getInstance()
+
+        // ✅ Log testing
+        db.collection("reports")
+            .get()
+            .addOnSuccessListener {
+                Log.d("Firestore", "Berhasil ambil laporan: ${it.size()}")
+            }
+            .addOnFailureListener {
+                Log.e("Firestore", "Gagal ambil data", it)
+            }
         Log.d("ReportLoad", "1")
 
-        val db = FirebaseFirestore.getInstance()
         Log.d("ReportLoad", "2")
 
         db.collection("reports")
@@ -59,9 +69,10 @@ class WargaHomeActivity : AppCompatActivity() {
 
                 reportAdapter = ReportAdapter(reports) { report ->
                     val intent = Intent(this, ReportDetailActivity::class.java)
-                    intent.putExtra("REPORT_ID", report.id)
+                    intent.putExtra("REPORT_ID", report.id) // ← ID dikirim di sini
                     startActivity(intent)
                 }
+
 
                 Toast.makeText(this, "Berhasil memuat laporan", Toast.LENGTH_SHORT).show()
                 Log.d("ReportLoad", "3")

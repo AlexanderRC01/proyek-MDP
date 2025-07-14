@@ -2,6 +2,7 @@ package com.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -57,6 +58,7 @@ class LoginActivity : AppCompatActivity() {
                             db.collection("users").document(uid).get()
                                 .addOnSuccessListener { document ->
                                     val role = document.getString("role") ?: "warga"
+                                    Log.d("FirebaseUser", "UID: ${auth.currentUser?.uid}")
 
                                     val intent = when (role) {
                                         "admin" -> Intent(this, AdminHome::class.java)

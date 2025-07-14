@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- Untuk Android 13+ -->
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -16,6 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.UberWatch"
         tools:targetApi="31">
+        <activity
+            android:name=".ReportDetailActivity"
+            android:exported="false" />
         <activity
             android:name=".ManageUsersActivity"
             android:exported="false" />
