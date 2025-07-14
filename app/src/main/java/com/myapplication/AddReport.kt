@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -16,10 +17,13 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.android.gms.maps.model.LatLng // ✅ BENAR
 import java.util.UUID
 
 class AddReport : AppCompatActivity() {
@@ -32,11 +36,17 @@ class AddReport : AppCompatActivity() {
     private var selectedImageUri: Uri? = null
     private val PICK_IMAGE_REQUEST = 101
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private var currentLatLng: LatLng? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_report)
 
         checkStoragePermission()
+        checkLocationPermission()
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         titleInput = findViewById(R.id.editTextReportTitle)
         descInput = findViewById(R.id.editTextDescription)
@@ -47,6 +57,10 @@ class AddReport : AppCompatActivity() {
             val intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
             startActivityForResult(intent, PICK_IMAGE_REQUEST)
+        }
+
+        findViewById<Button>(R.id.buttonSelectLocation).setOnClickListener {
+            fetchCurrentLocation()
         }
 
         btnSubmit.setOnClickListener {
@@ -102,6 +116,13 @@ class AddReport : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
             selectedImageUri = data.data
+            if (selectedImageUri == null) {
+                Toast.makeText(this, "Pilih gambar terlebih dahulu", Toast.LENGTH_SHORT).show()
+                return
+            }
+
+            val preview: ImageView = findViewById(R.id.imagePreview)
+            preview.setImageURI(selectedImageUri)
             Toast.makeText(this, "Gambar berhasil dipilih", Toast.LENGTH_SHORT).show()
             Log.d("AddReport", "Image URI: $selectedImageUri") // CEK URI
         }
@@ -147,7 +168,9 @@ class AddReport : AppCompatActivity() {
             "imageUrl" to imageUrl,
             "profileUrl" to "https://via.placeholder.com/100x100",
             "userName" to userName,
-            "timestamp" to FieldValue.serverTimestamp()
+            "timestamp" to FieldValue.serverTimestamp(),
+            "latitude" to currentLatLng?.latitude,
+            "longitude" to currentLatLng?.longitude
         )
 
         FirebaseFirestore.getInstance().collection("reports").add(report)
@@ -160,4 +183,32 @@ class AddReport : AppCompatActivity() {
             }
     }
 
+    private fun checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                103
+            )
+        }
+    }
+
+    private fun fetchCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Izin lokasi belum diberikan", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location ->
+                if (location != null) {
+                    currentLatLng = LatLng(location.latitude, location.longitude)
+                    Toast.makeText(this, "Lokasi ditemukan: ${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Gagal mendapatkan lokasi", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
 }

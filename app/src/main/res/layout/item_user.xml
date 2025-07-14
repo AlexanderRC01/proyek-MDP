@@ -36,5 +36,32 @@
             android:text="Role"
             android:textSize="14sp"
             android:textColor="#2980B9" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="end">
+
+            <Button
+                android:id="@+id/btnChangeRole"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ubah Role"
+                android:textSize="12sp"
+                android:backgroundTint="#3498DB"
+                android:textColor="#FFFFFF"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/btnDeleteUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hapus"
+                android:textSize="12sp"
+                android:backgroundTint="#E74C3C"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>
