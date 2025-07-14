@@ -2,6 +2,7 @@ package com.myapplication
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -43,14 +44,17 @@ class WargaHomeActivity : AppCompatActivity() {
 
 
     private fun loadReports() {
+        Log.d("ReportLoad", "1")
+
         val db = FirebaseFirestore.getInstance()
+        Log.d("ReportLoad", "2")
+
         db.collection("reports")
             .orderBy("timestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 val reports = result.map { doc ->
-                    val report = doc.toObject(Report::class.java)
-                    report.copy(id = doc.id)
+                    doc.toObject(Report::class.java).copy(id = doc.id)
                 }
 
                 reportAdapter = ReportAdapter(reports) { report ->
@@ -60,6 +64,10 @@ class WargaHomeActivity : AppCompatActivity() {
                 }
 
                 Toast.makeText(this, "Berhasil memuat laporan", Toast.LENGTH_SHORT).show()
+                Log.d("ReportLoad", "3")
+
+                Log.d("ReportLoad", "Reports fetched: ${reports.size}")
+                Log.d("ReportLoad", "4")
 
                 recyclerView.adapter = reportAdapter
             }

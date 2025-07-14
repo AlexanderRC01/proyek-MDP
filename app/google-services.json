@@ -7,25 +7,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1087394222978:android:b20f61e37a8cf1acbc359b",
-        "android_client_info": {
-          "package_name": "com.example.cityreports"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyBpC59usM0o0Es2KR9i4JUe8kDq952eles"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:1087394222978:android:cf1cb7afc240e725bc359b",
         "android_client_info": {
           "package_name": "com.myapplication"

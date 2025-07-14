@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -99,15 +100,21 @@ class AddReport : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
-            selectedImageUri = data?.data
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
+            selectedImageUri = data.data
             Toast.makeText(this, "Gambar berhasil dipilih", Toast.LENGTH_SHORT).show()
+            Log.d("AddReport", "Image URI: $selectedImageUri") // CEK URI
         }
     }
+
 
     private fun uploadImageAndSaveReport() {
         val fileName = UUID.randomUUID().toString()
         val storageRef = FirebaseStorage.getInstance().reference.child("reportImages/$fileName")
+        if (selectedImageUri == null) {
+            Toast.makeText(this, "Pilih gambar terlebih dahulu", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         storageRef.putFile(selectedImageUri!!)
             .continueWithTask { task ->
