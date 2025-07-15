@@ -39,6 +39,12 @@ class WargaHomeActivity : AppCompatActivity() {
             startActivity(Intent(this, AddReport::class.java))
         }
 
+        binding.btnGoToProfile.setOnClickListener {
+            val intent = Intent(this, WargaProfileActivity::class.java)
+            startActivity(intent)
+        }
+
+
         loadReports()
     }
 

@@ -134,8 +134,33 @@
             android:textColor="#FFFFFF"
             app:layout_constraintTop_toBottomOf="@id/etUserAge"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Tombol Kembali -->
+        <Button
+            android:id="@+id/btnBackHome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Kembali ke Home"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#2980B9"
+            android:textColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/btnSaveProfile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Tombol Logout -->
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="#E74C3C"
+            android:textColor="#FFFFFF"
+            app:layout_constraintTop_toBottomOf="@id/btnBackHome"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginBottom="24dp"/>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

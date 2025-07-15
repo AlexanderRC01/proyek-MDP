@@ -7,9 +7,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -39,9 +43,34 @@ class AddReport : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var currentLatLng: LatLng? = null
 
+    private lateinit var categorySpinner: Spinner
+    private var selectedCategory: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_report)
+
+        categorySpinner = findViewById(R.id.spinnerCategory)
+
+        val categories = listOf("Jalan Rusak", "Lampu Mati", "Banjir", "Sampah", "Lainnya")
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categories)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        categorySpinner.adapter = adapter
+
+        categorySpinner.setOnItemSelectedListener(object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedCategory = categories[position]
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                selectedCategory = null
+            }
+        })
 
         checkStoragePermission()
         checkLocationPermission()
@@ -159,6 +188,11 @@ class AddReport : AppCompatActivity() {
             return
         }
 
+        if (selectedCategory == null) {
+            Toast.makeText(this, "Silakan pilih kategori", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val user = FirebaseAuth.getInstance().currentUser
         val userName = user?.email ?: "Anonymous"
 
@@ -170,8 +204,10 @@ class AddReport : AppCompatActivity() {
             "userName" to userName,
             "timestamp" to FieldValue.serverTimestamp(),
             "latitude" to currentLatLng?.latitude,
-            "longitude" to currentLatLng?.longitude
+            "longitude" to currentLatLng?.longitude,
+            "category" to selectedCategory
         )
+
 
         FirebaseFirestore.getInstance().collection("reports").add(report)
             .addOnSuccessListener {

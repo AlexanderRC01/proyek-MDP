@@ -1,6 +1,7 @@
 package com.myapplication
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -21,6 +22,9 @@ class WargaProfileActivity : AppCompatActivity() {
     private lateinit var btnSave: Button
     private lateinit var btnChangePhoto: TextView
     private lateinit var imgPhoto: ImageView
+    private lateinit var btnBackHome: TextView
+    private lateinit var btnLogout: ImageView
+
 
     private var selectedPhotoUri: Uri? = null
     private val PICK_IMAGE_REQUEST = 1
@@ -41,6 +45,10 @@ class WargaProfileActivity : AppCompatActivity() {
         btnSave = findViewById(R.id.btnSaveProfile)
         btnChangePhoto = findViewById(R.id.btnChangePhoto)
         imgPhoto = findViewById(R.id.imgUserPhoto)
+        btnLogout = findViewById(R.id.btnLogout)
+        btnBackHome = findViewById(R.id.btnBackHome)
+
+        etEmail.isEnabled = false
 
         loadUserData()
 
@@ -53,6 +61,27 @@ class WargaProfileActivity : AppCompatActivity() {
         btnSave.setOnClickListener {
             saveUserData()
         }
+
+        btnBackHome.setOnClickListener {
+            finish() // kembali ke halaman sebelumnya (WargaHome)
+        }
+
+        btnLogout.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Logout")
+                .setMessage("Yakin ingin keluar dari akun?")
+                .setPositiveButton("Ya") { _, _ ->
+                    FirebaseAuth.getInstance().signOut()
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                }
+                .setNegativeButton("Batal", null)
+                .show()
+        }
+
+
+
     }
 
     private fun loadUserData() {
