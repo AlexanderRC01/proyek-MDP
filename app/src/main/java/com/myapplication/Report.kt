@@ -9,12 +9,13 @@ data class Report(
     val imageUrl: String? = null,
     val userName: String? = null,
     val profileUrl: String? = null,
-    val timestamp: Timestamp? = null, // ✅ Gunakan alias dari import
+    val timestamp: Timestamp? = null,
     val latitude: Double? = null,
     val longitude: Double? = null,
     val status: String? = null,
-    val category: String? = null
+    val rating: Int? = null // ⭐ Tambahkan ini
 )
+
 
 
 

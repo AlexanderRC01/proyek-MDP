@@ -3,10 +3,12 @@ package com.myapplication
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.myapplication.databinding.ActivityAdminHomeBinding
 import com.google.firebase.firestore.Query
@@ -32,8 +34,29 @@ class AdminHome : AppCompatActivity() {
         }
 
         binding.settingsButton.setOnClickListener {
-            // buka halaman pengaturan atau logout
+            val options = arrayOf("Lihat Statistik", "Logout")
+            AlertDialog.Builder(this)
+                .setTitle("Pengaturan")
+                .setItems(options) { dialog, which ->
+                    when (which) {
+                        0 -> startActivity(Intent(this, AdminStatisticsActivity::class.java))
+                        1 -> {
+                            FirebaseAuth.getInstance().signOut()
+                            val intent = Intent(this, LoginActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                        }
+                    }
+                }
+                .setNegativeButton("Batal", null)
+                .show()
         }
+
+
+        binding.btnViewStatistics.setOnClickListener {
+            startActivity(Intent(this, AdminStatisticsActivity::class.java))
+        }
+
 
     }
 

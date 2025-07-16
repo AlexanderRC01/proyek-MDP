@@ -12,7 +12,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.google.firebase.firestore.FirebaseFirestore
 import com.bumptech.glide.Glide
 import android.net.Uri
+import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 
 class ReportDetailActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
@@ -63,7 +65,48 @@ class ReportDetailActivity : AppCompatActivity() {
                                 Toast.makeText(this, "Lokasi tidak tersedia", Toast.LENGTH_SHORT).show()
                             }
                         }
+                        val ratingButton = findViewById<Button>(R.id.btnGiveRating)
+                        if (report.status == "Selesai") {
+                            ratingButton.visibility = View.VISIBLE
+                        } else {
+                            ratingButton.visibility = View.GONE
+                        }
 
+                        if (report.status == "Selesai" && report.rating == null) {
+                            ratingButton.visibility = View.VISIBLE
+                        } else {
+                            ratingButton.visibility = View.GONE
+                        }
+
+                        val ratingText = findViewById<TextView>(R.id.reportRatingText)
+                        if (report.rating != null) {
+                            ratingText.text = "Rating: ${report.rating} ★"
+                            ratingText.visibility = View.VISIBLE
+                        } else {
+                            ratingText.visibility = View.GONE
+                        }
+
+
+                        ratingButton.setOnClickListener {
+                            val ratings = arrayOf("1", "2", "3", "4", "5")
+                            AlertDialog.Builder(this)
+                                .setTitle("Beri Rating Laporan")
+                                .setSingleChoiceItems(ratings, -1) { dialog, which ->
+                                    val selectedRating = ratings[which].toInt()
+                                    FirebaseFirestore.getInstance().collection("reports")
+                                        .document(reportId!!)
+                                        .update("rating", selectedRating)
+                                        .addOnSuccessListener {
+                                            Toast.makeText(this, "Rating berhasil disimpan", Toast.LENGTH_SHORT).show()
+                                        }
+                                        .addOnFailureListener {
+                                            Toast.makeText(this, "Gagal menyimpan rating", Toast.LENGTH_SHORT).show()
+                                        }
+                                    dialog.dismiss()
+                                }
+                                .setNegativeButton("Batal", null)
+                                .show()
+                        }
 
                     }
                 }

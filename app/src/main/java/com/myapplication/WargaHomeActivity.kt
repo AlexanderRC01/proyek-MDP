@@ -3,6 +3,7 @@ package com.myapplication
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -12,61 +13,54 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.myapplication.databinding.ActivityLoginBinding
 import com.myapplication.databinding.ActivityWargaHomeBinding
 
 class WargaHomeActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWargaHomeBinding
-    private lateinit var recyclerView: RecyclerView
     private lateinit var reportAdapter: ReportAdapter
-    private lateinit var addReportButton: Button
+    private val db = FirebaseFirestore.getInstance()
+    private val currentEmail = FirebaseAuth.getInstance().currentUser?.email
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Inisialisasi ViewBinding
         binding = ActivityWargaHomeBinding.inflate(layoutInflater)
-        setContentView(binding.root) // <-- WAJIB supaya layout tampil
+        setContentView(binding.root)
 
-        // RecyclerView sudah terhubung di XML via binding
-        recyclerView = binding.reportsRecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        // Kalau kamu punya tombol tambah laporan, ambil juga via binding
-        addReportButton = binding.createReportButton
-        addReportButton.setOnClickListener {
+        binding.createReportButton.setOnClickListener {
             startActivity(Intent(this, AddReport::class.java))
         }
 
         binding.btnGoToProfile.setOnClickListener {
-            val intent = Intent(this, WargaProfileActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, WargaProfileActivity::class.java))
         }
 
+        binding.btnFilterMyReports.setOnClickListener {
+            loadReports(showOnlyMine = true)
+        }
 
-        loadReports()
+        binding.btnFilterAllReports.setOnClickListener {
+            loadReports(showOnlyMine = false)
+        }
+
+        setupRecyclerView()
+        loadReports(showOnlyMine = false) // Default tampilkan semua laporan
     }
 
+    private fun setupRecyclerView() {
+        binding.reportsRecyclerView.layoutManager = LinearLayoutManager(this)
+    }
 
-    private fun loadReports() {
-        val db = FirebaseFirestore.getInstance()
+    private fun loadReports(showOnlyMine: Boolean = false) {
+        val query = if (showOnlyMine && currentEmail != null) {
+            db.collection("reports").whereEqualTo("userName", currentEmail)
+        } else {
+            db.collection("reports")
+        }
 
-        // ✅ Log testing
-        db.collection("reports")
-            .get()
-            .addOnSuccessListener {
-                Log.d("Firestore", "Berhasil ambil laporan: ${it.size()}")
-            }
-            .addOnFailureListener {
-                Log.e("Firestore", "Gagal ambil data", it)
-            }
-        Log.d("ReportLoad", "1")
-
-        Log.d("ReportLoad", "2")
-
-        db.collection("reports")
-            .orderBy("timestamp", Query.Direction.DESCENDING)
+        query.orderBy("timestamp", Query.Direction.DESCENDING)
             .get()
             .addOnSuccessListener { result ->
                 val reports = result.map { doc ->
@@ -75,18 +69,11 @@ class WargaHomeActivity : AppCompatActivity() {
 
                 reportAdapter = ReportAdapter(reports) { report ->
                     val intent = Intent(this, ReportDetailActivity::class.java)
-                    intent.putExtra("REPORT_ID", report.id) // ← ID dikirim di sini
+                    intent.putExtra("REPORT_ID", report.id)
                     startActivity(intent)
                 }
 
-
-                Toast.makeText(this, "Berhasil memuat laporan", Toast.LENGTH_SHORT).show()
-                Log.d("ReportLoad", "3")
-
-                Log.d("ReportLoad", "Reports fetched: ${reports.size}")
-                Log.d("ReportLoad", "4")
-
-                recyclerView.adapter = reportAdapter
+                binding.reportsRecyclerView.adapter = reportAdapter
             }
             .addOnFailureListener {
                 Toast.makeText(this, "Gagal memuat laporan", Toast.LENGTH_SHORT).show()
