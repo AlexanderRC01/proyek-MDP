@@ -17,11 +17,13 @@ import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 
 class ReportDetailActivity : AppCompatActivity() {
+    private val currentUser = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser
     private lateinit var imageView: ImageView
     private lateinit var titleView: TextView
     private lateinit var descView: TextView
     private lateinit var userView: TextView
     private lateinit var timestampView: TextView
+    private lateinit var btnEditReport: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +36,7 @@ class ReportDetailActivity : AppCompatActivity() {
         descView = findViewById(R.id.detailDescription)
         userView = findViewById(R.id.detailUser)
         timestampView = findViewById(R.id.detailTimestamp)
+        btnEditReport = findViewById(R.id.btnEditReport)
 
         if (reportId != null) {
             FirebaseFirestore.getInstance().collection("reports").document(reportId)
@@ -86,6 +89,15 @@ class ReportDetailActivity : AppCompatActivity() {
                             ratingText.visibility = View.GONE
                         }
 
+                        if (report.userName == currentUser?.email && report.status == "baru") {
+                            btnEditReport.visibility = View.VISIBLE
+                        }
+
+                        btnEditReport.setOnClickListener {
+                            val intent = Intent(this, EditReportActivity::class.java)
+                            intent.putExtra("REPORT_ID", reportId) // ← reportId dari intent
+                            startActivity(intent)
+                        }
 
                         ratingButton.setOnClickListener {
                             val ratings = arrayOf("1", "2", "3", "4", "5")

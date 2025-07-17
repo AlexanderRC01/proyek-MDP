@@ -13,7 +13,8 @@ data class Report(
     val latitude: Double? = null,
     val longitude: Double? = null,
     val status: String? = null,
-    val rating: Int? = null // ⭐ Tambahkan ini
+    val rating: Int? = null, // ⭐ Tambahkan ini
+    val category: String? = null
 )
 
 

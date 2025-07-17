@@ -72,5 +72,16 @@
             android:text="Rating: -"
             android:visibility="gone"/>
 
+        <Button
+            android:id="@+id/btnEditReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit Laporan"
+            android:layout_marginTop="12dp"
+            android:visibility="gone"
+            android:backgroundTint="#3498DB"
+            android:textColor="#FFFFFF" />
+
+
     </LinearLayout>
 </ScrollView>
